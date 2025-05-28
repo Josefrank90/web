@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+
+{% block title %}Calificar Entrega{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="mb-4">Calificar Entrega de Actividad</h2>
+
+    <div class="card shadow-sm mb-4">
+        <div class="card-header bg-info text-white">
+            Detalles de la Entrega
+        </div>
+        <div class="card-body">
+            <p><strong>Participante:</strong> {{ participant.username }}</p>
+            <p><strong>Curso:</strong> {{ course.title }}</p>
+            <p><strong>Actividad:</strong> {{ activity.title }}</p>
+            <p><strong>Descripción de la Actividad:</strong> {{ activity.description }}</p>
+            <p><strong>Fecha de Entrega Límite:</strong> {{ activity.due_date.strftime('%Y-%m-%d %H:%M') if activity.due_date else 'N/A' }}</p>
+            <p><strong>Fecha de Envío:</strong> {{ submission.submitted_at.strftime('%Y-%m-%d %H:%M') }}</p>
+            
+            {% if submission.submission_text %}
+            <div class="mb-3">
+                <h6>Texto de la Entrega:</h6>
+                <pre class="bg-light p-3 rounded">{{ submission.submission_text }}</pre>
+            </div>
+            {% endif %}
+
+            {% if submission.file_path %}
+            <div class="mb-3">
+                <h6>Archivo Adjunto:</h6>
+                <a href="{{ url_for('uploaded_file', filename=submission.file_path.split('/')[-1]) }}" target="_blank" class="btn btn-sm btn-outline-primary">Ver Archivo Adjunto</a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    {% if existing_qualification %}
+    <div class="alert alert-warning" role="alert">
+        Esta entrega ya ha sido calificada. Calificación existente: <strong>{{ existing_qualification.score }}</strong>.
+        Comentarios: {{ existing_qualification.comments if existing_qualification.comments else 'Ninguno' }}.
+    </div>
+    {% else %}
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <form method="POST">
+                <div class="mb-3">
+                    <label for="score" class="form-label">Calificación (10-100)</label>
+                    <input type="number" class="form-control" id="score" name="score" min="10" max="100" required>
+                </div>
+                <div class="mb-3">
+                    <label for="comments" class="form-label">Comentarios (Opcional)</label>
+                    <textarea class="form-control" id="comments" name="comments" rows="4"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Guardar Calificación</button>
+                <a href="{{ url_for('assigned_participants') }}" class="btn btn-secondary">Cancelar</a>
+            </form>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

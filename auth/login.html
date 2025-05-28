@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %}Iniciar Sesión{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card shadow p-4" style="background-color: #e6f7ff;">
+            <h2 class="card-title text-center mb-4" style="color: #007bff;">Iniciar Sesión</h2>
+            <form method="POST" action="{{ url_for('login') }}"> {# La acción del formulario se dirige a la misma ruta de login #}
+                <div class="mb-3">
+                    <label for="username" class="form-label">Nombre de Usuario</label>
+                    <input type="text" class="form-control" id="username" name="username" required>
+                </div>
+                <div class="mb-3">
+                    <label for="password" class="form-label">Contraseña</label>
+                    <input type="password" class="form-control" id="password" name="password" required>
+                </div>
+                <button type="submit" class="btn btn-primary w-100">Entrar</button>
+            </form>
+            <p class="text-center mt-3">¿No tienes una cuenta? <a href="{{ url_for('register') }}">Regístrate aquí</a></p>
+        </div>
+    </div>
+</div>
+{% endblock %}

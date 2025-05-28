@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block title %}Gestionar Concursos{% endblock %}
+
+{% block content %}
+<h1 class="mb-4 text-center" style="color: #4caf50;">Gestión de Concursos</h1>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card shadow mb-4 border-primary" style="background-color: #e3f2fd;">
+            <div class="card-header bg-primary text-white">
+                <h4>Concursos Existentes</h4>
+            </div>
+            <div class="card-body">
+                {% if courses %}
+                    <ul class="list-group list-group-flush">
+                        {% for course in courses %}
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <div>
+                                    <strong>{{ course.title }}</strong>: {{ course.description[:50] }}...
+                                </div>
+                                <form action="{{ url_for('manage_courses') }}" method="POST" onsubmit="return confirm('¿Estás seguro de que quieres eliminar este curso?');">
+                                    <input type="hidden" name="action" value="delete">
+                                    <input type="hidden" name="course_id" value="{{ course.id }}">
+                                    <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
+                                </form>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p class="text-center">No hay concursos existentes.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card shadow mb-4 border-success" style="background-color: #e8f5e9;">
+            <div class="card-header bg-success text-white">
+                <h4>Añadir Nuevo Curso</h4>
+            </div>
+            <div class="card-body">
+                <form action="{{ url_for('manage_courses') }}" method="POST">
+                    <input type="hidden" name="action" value="add_course">
+                    <div class="mb-3">
+                        <label for="new_course_title" class="form-label">Título del Concurso</label>
+                        <input type="text" class="form-control" id="new_course_title" name="title" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="new_course_description" class="form-label">Descripción</label>
+                        <textarea class="form-control" id="new_course_description" name="description" rows="3" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-success w-100">Añadir Concurso</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

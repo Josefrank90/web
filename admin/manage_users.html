@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+
+{% block title %}Gestionar Usuarios{% endblock %}
+
+{% block content %}
+<h1 class="mb-4 text-center" style="color: #ff5722;">Gestión de Usuarios</h1>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card shadow mb-4 border-info" style="background-color: #e0f7fa;">
+            <div class="card-header bg-info text-white">
+                <h4>Participantes Registrados</h4>
+            </div>
+            <div class="card-body">
+                {% if participants %}
+                    <ul class="list-group list-group-flush">
+                        {% for participant in participants %}
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <div>
+                                    <strong>{{ participant.username }}</strong> ({{ participant.email }})
+                                </div>
+                                <form action="{{ url_for('manage_users') }}" method="POST" onsubmit="return confirm('¿Estás seguro de que quieres eliminar a este participante?');">
+                                    <input type="hidden" name="action" value="delete">
+                                    <input type="hidden" name="user_id" value="{{ participant.id }}">
+                                    <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
+                                </form>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p class="text-center">No hay participantes registrados.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card shadow mb-4 border-primary" style="background-color: #e3f2fd;">
+            <div class="card-header bg-primary text-white">
+                <h4>Jueces Registrados</h4>
+            </div>
+            <div class="card-body">
+                {% if judges %}
+                    <ul class="list-group list-group-flush">
+                        {% for judge in judges %}
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <div>
+                                    <strong>{{ judge.username }}</strong> ({{ judge.email }})
+                                </div>
+                                <form action="{{ url_for('manage_users') }}" method="POST" onsubmit="return confirm('¿Estás seguro de que quieres eliminar a este juez?');">
+                                    <input type="hidden" name="action" value="delete">
+                                    <input type="hidden" name="user_id" value="{{ judge.id }}">
+                                    <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
+                                </form>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p class="text-center">No hay jueces registrados.</p>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="card shadow mt-4 border-success" style="background-color: #e8f5e9;">
+            <div class="card-header bg-success text-white">
+                <h4>Añadir Nuevo Juez</h4>
+            </div>
+            <div class="card-body">
+                <form action="{{ url_for('manage_users') }}" method="POST">
+                    <input type="hidden" name="action" value="add_judge">
+                    <div class="mb-3">
+                        <label for="new_judge_username" class="form-label">Nombre de Usuario</label>
+                        <input type="text" class="form-control" id="new_judge_username" name="username" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="new_judge_email" class="form-label">Correo Electrónico</label>
+                        <input type="email" class="form-control" id="new_judge_email" name="email" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="new_judge_password" class="form-label">Contraseña</label>
+                        <input type="password" class="form-control" id="new_judge_password" name="password" required>
+                    </div>
+                    <button type="submit" class="btn btn-success w-100">Añadir Juez</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

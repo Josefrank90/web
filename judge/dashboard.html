@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard del Juez{% endblock %}
+
+{% block content %}
+<div class="bg-primary-subtle p-4 rounded-3 text-white text-center shadow-lg" style="background-color: #6a1b9a; color: #fff;">
+    <h1 class="display-5">Bienvenido, Juez {{ session.username }}</h1> {# Usar session.username directamente #}
+    <p class="lead">Tu panel para gestionar las evaluaciones de los participantes.</p>
+</div>
+
+<div class="row mt-4">
+    <div class="col-md-6">
+        <div class="card border-primary mb-3 shadow" style="background-color: #e0f2f7;">
+            <div class="card-header text-primary">Participantes Asignados</div>
+            <div class="card-body">
+                <h5 class="card-title">Revisa los participantes que te han sido asignados (para referencia).</h5>
+                <p class="card-text">Aunque la calificación es por entrega, aquí puedes ver las asignaciones generales.</p>
+                {# Este enlace sigue llevando a la misma ruta, que ahora muestra las entregas #}
+                <a href="{{ url_for('assigned_participants') }}" class="btn btn-primary">Ver Asignaciones</a>
+            </div>
+        </div>
+    </div>
+    
+    {# ESTA ES LA NUEVA CARD PARA "ENTREGAS PENDIENTES" #}
+    <div class="col-md-6">
+        <div class="card border-warning mb-3 shadow" style="background-color: #fff3e0;">
+            <div class="card-header text-warning">Entregas Pendientes</div>
+            <div class="card-body">
+                <h5 class="card-title">Revisa las actividades que debes calificar.</h5>
+                <p class="card-text">Aquí encontrarás las entregas de participantes asignadas a ti para evaluación.</p>
+                {# Este enlace también va a la misma ruta, 'assigned_participants', que ahora lista las SUBMISSIONS #}
+                <a href="{{ url_for('assigned_participants') }}" class="btn btn-warning">Ver Entregas Pendientes</a> 
+            </div>
+        </div>
+    </div>
+
+    {# El de Criterios de Evaluación se queda si lo quieres para el futuro #}
+    <div class="col-md-6 mt-4"> {# Agregamos mt-4 para que no se pegue a la fila de arriba #}
+        <div class="card border-success mb-3 shadow" style="background-color: #e6ffe6;">
+            <div class="card-header text-success">Criterios de Evaluación</div>
+            <div class="card-body">
+                <h5 class="card-title">Define o consulta los criterios.</h5>
+                <p class="card-text">Aunque no está implementado aquí, este sería el lugar para gestionar o ver los criterios de evaluación.</p>
+                <a href="#" class="btn btn-success disabled">Gestionar Criterios (Próximamente)</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

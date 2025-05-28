@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block title %}Nuestros Concursos{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="text-center mb-4" style="color: #6a0dad;">Nuestros Concursos de Diseño Gráfico</h2>
+
+    <div class="row">
+        {% for course in courses %}
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm h-100" style="border-color: #d1b3ff;">
+                <div class="card-body">
+                    <h5 class="card-title" style="color: #6a0dad;">{{ course.title }}</h5>
+                    <p class="card-text">{{ course.description }}</p>
+
+                    {# Lógica para el botón de inscripción #}
+                    {% if session.get('user_id') %}
+                        {# Si el usuario está logueado #}
+                        {% if session.get('role') == 'participante' %}
+                            {# Si es un participante, mostrar botón de inscripción #}
+                            <form action="{{ url_for('enroll_course', course_id=course.id) }}" method="POST">
+                                <button type="submit" class="btn btn-primary mt-3" style="background-color: #6a0dad; border-color: #6a0dad;">Inscribirse al Curso</button>
+                            </form>
+                        {% else %}
+                            {# Si está logueado pero no es participante #}
+                            <p class="text-warning mt-3">Solo los participantes pueden inscribirse.</p>
+                        {% endif %}
+                    {% else %}
+                        {# Si el usuario NO está logueado #}
+                        <p class="text-info mt-3">Inicia sesión o regístrate como participante para inscribirte.</p>
+                        <a href="{{ url_for('register') }}" class="btn btn-secondary btn-sm mt-2">Registrarse</a>
+                        <a href="{{ url_for('login') }}" class="btn btn-outline-secondary btn-sm mt-2">Iniciar Sesión</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

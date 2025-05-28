@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block title %}Añadir Actividad{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="mb-4">Añadir Nueva Actividad al Curso: "{{ course.title }}"</h2>
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <form method="POST">
+                <div class="mb-3">
+                    <label for="title" class="form-label">Título de la Actividad</label>
+                    <input type="text" class="form-control" id="title" name="title" required>
+                </div>
+                <div class="mb-3">
+                    <label for="description" class="form-label">Descripción</label>
+                    <textarea class="form-control" id="description" name="description" rows="5" required></textarea>
+                </div>
+                <div class="mb-3">
+                    <label for="due_date" class="form-label">Fecha y Hora Límite (Opcional)</label>
+                    <input type="datetime-local" class="form-control" id="due_date" name="due_date">
+                </div>
+                <button type="submit" class="btn btn-primary">Añadir Actividad</button>
+                <a href="{{ url_for('manage_activities') }}" class="btn btn-secondary">Cancelar</a>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

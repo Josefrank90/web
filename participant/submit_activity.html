@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block title %}Enviar Actividad{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="mb-4">Enviar Actividad: "{{ activity.title }}" (Curso: {{ course.title }})</h2>
+
+    {% if existing_submission %}
+    <div class="alert alert-info" role="alert">
+        Ya has enviado esta actividad. Puedes actualizar tu entrega a continuación.
+        <br>
+        <strong>Estado actual:</strong> <span class="badge bg-info">{{ existing_submission.status }}</span>
+        {% if existing_submission.file_path %}
+            <br><strong>Archivo adjunto:</strong> <a href="{{ url_for('uploaded_file', filename=existing_submission.file_path.split('/')[-1]) }}" target="_blank">Ver archivo</a>
+        {% endif %}
+        {% if existing_submission.submission_text %}
+            <br><strong>Texto de la entrega:</strong> {{ existing_submission.submission_text }}
+        {% endif %}
+    </div>
+    {% endif %}
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <form method="POST" enctype="multipart/form-data"> {# IMPORTANTE: enctype para subida de archivos #}
+                <div class="mb-3">
+                    <label for="submission_text" class="form-label">Texto de la Entrega (Opcional)</label>
+                    <textarea class="form-control" id="submission_text" name="submission_text" rows="5">{{ existing_submission.submission_text if existing_submission else '' }}</textarea>
+                </div>
+                <div class="mb-3">
+                    <label for="file" class="form-label">Subir Archivo (Opcional)</label>
+                    <input type="file" class="form-control" id="file" name="file">
+                    <small class="form-text text-muted">Archivos permitidos: {{ config['ALLOWED_EXTENSIONS'] | join(', ') }}.</small>
+                </div>
+                <button type="submit" class="btn btn-primary">
+                    {% if existing_submission %}Actualizar Entrega{% else %}Enviar Entrega{% endif %}
+                </button>
+                <a href="{{ url_for('my_courses') }}" class="btn btn-secondary">Cancelar</a>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

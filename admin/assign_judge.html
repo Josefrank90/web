@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block title %}Asignar Juez{% endblock %}
+
+{% block content %}
+<h1 class="mb-4 text-center" style="color: #673ab7;">Asignar Juez a Participante y Concurso</h1>
+
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card shadow p-4" style="background-color: #ede7f6;">
+            <form action="{{ url_for('assign_judge') }}" method="POST">
+                <div class="mb-3">
+                    <label for="participant_id" class="form-label">Seleccionar Participante</label>
+                    <select class="form-select" id="participant_id" name="participant_id" required>
+                        <option value="">-- Seleccione un participante --</option>
+                        {% for p in participants %}
+                            <option value="{{ p.id }}">{{ p.username }} ({{ p.email }})</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="judge_id" class="form-label">Seleccionar Juez</label>
+                    <select class="form-select" id="judge_id" name="judge_id" required>
+                        <option value="">-- Seleccione un juez --</option>
+                        {% for j in judges %}
+                            <option value="{{ j.id }}">{{ j.username }} ({{ j.email }})</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="course_id" class="form-label">Seleccionar Concurso</label>
+                    <select class="form-select" id="course_id" name="course_id" required>
+                        <option value="">-- Seleccione un concurso --</option>
+                        {% for c in courses %}
+                            <option value="{{ c.id }}">{{ c.title }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary w-100">Asignar Juez</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

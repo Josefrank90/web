@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard del Administrador{% endblock %}
+
+{% block content %}
+<div class="bg-danger-subtle p-4 rounded-3 text-white text-center shadow-lg" style="background-color: #dc3545; color: #fff;">
+    <h1 class="display-5">Bienvenido, Administrador {{ session.username }}</h1> {# Usar session.username directamente #}
+    <p class="lead">Este es tu panel de control para la gestión completa del sistema.</p>
+</div>
+
+<div class="row mt-4">
+    <div class="col-md-4">
+        <div class="card border-primary mb-3 shadow" style="background-color: #e0f2f7;">
+            <div class="card-header text-primary">Gestionar Usuarios</div>
+            <div class="card-body">
+                <h5 class="card-title">Añade o elimina participantes y jueces.</h5>
+                <p class="card-text">Controla quién tiene acceso y qué rol juega en la plataforma.</p>
+                <a href="{{ url_for('manage_users') }}" class="btn btn-primary">Gestionar Usuarios</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card border-success mb-3 shadow" style="background-color: #e6ffe6;">
+            <div class="card-header text-success">Gestionar Cursos</div> {# Cambié "Concursos" a "Cursos" para mantener consistencia con los modelos #}
+            <div class="card-body">
+                <h5 class="card-title">Crea, edita o elimina cursos.</h5>
+                <p class="card-text">Administra la oferta académica disponible para los participantes.</p>
+                <a href="{{ url_for('manage_courses') }}" class="btn btn-success">Gestionar Cursos</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card border-info mb-3 shadow" style="background-color: #e3f2fd;">
+            <div class="card-header text-info">Asignar Jueces</div>
+            <div class="card-body">
+                <h5 class="card-title">Asigna jueces a participantes.</h5>
+                <p class="card-text">Organiza las evaluaciones de los proyectos de los estudiantes.</p>
+                <a href="{{ url_for('assign_judge') }}" class="btn btn-info">Asignar Jueces</a>
+            </div>
+        </div>
+    </div>
+    
+    {# CARD PARA GESTIONAR INSCRIPCIONES #}
+    <div class="col-md-4 mt-4"> {# Agregamos mt-4 para que no se pegue a la fila de arriba #}
+        <div class="card border-warning mb-3 shadow" style="background-color: #fff3e0;">
+            <div class="card-header text-warning">Gestionar Inscripciones</div>
+            <div class="card-body">
+                <h5 class="card-title">Revisa y gestiona las inscripciones de los participantes.</h5>
+                <p class="card-text">Visualiza qué participantes están inscritos en qué cursos.</p>
+                <a href="{{ url_for('manage_enrollments') }}" class="btn btn-warning">Gestionar Inscripciones</a>
+            </div>
+        </div>
+    </div>
+
+    {# ESTA ES LA NUEVA CARD PARA GESTIONAR ACTIVIDADES #}
+    <div class="col-md-4 mt-4"> {# Agregamos mt-4 para que no se pegue a la fila de arriba #}
+        <div class="card border-secondary mb-3 shadow" style="background-color: #e9ecef;">
+            <div class="card-header text-secondary">Gestionar Actividades</div>
+            <div class="card-body">
+                <h5 class="card-title">Crea y administra actividades para tus cursos.</h5>
+                <p class="card-text">Define las tareas que los participantes deben completar y entregar.</p>
+                <a href="{{ url_for('manage_activities') }}" class="btn btn-secondary">Gestionar Actividades</a>
+            </div>
+        </div>
+    </div>
+
+    {# Puedes añadir más tarjetas aquí si es necesario #}
+</div>
+{% endblock %}

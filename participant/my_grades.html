@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+
+{% block title %}Mis Calificaciones{% endblock %}
+
+{% block content %}
+<div class="bg-success-subtle p-4 rounded-3 text-white text-center shadow-lg" style="background-color: #28a745; color: #fff;">
+    <h1 class="display-5">Mis Calificaciones</h1>
+    <p class="lead">Revisa el feedback de tus entregas y el progreso en tus cursos.</p>
+</div>
+
+<div class="row mt-4">
+    <div class="col-md-12">
+        <h3 class="text-success">Entregas Calificadas</h3>
+        {% if graded_submissions %}
+            <div class="accordion" id="gradedSubmissionsAccordion">
+                {% for submission in graded_submissions %}
+                <div class="card mb-2 shadow-sm">
+                    <div class="card-header" id="headingGraded{{ loop.index }}">
+                        <h2 class="mb-0">
+                            <button class="btn btn-link btn-block text-start" type="button" data-bs-toggle="collapse" data-bs-target="#collapseGraded{{ loop.index }}" aria-expanded="true" aria-controls="collapseGraded{{ loop.index }}">
+                                Actividad: <strong>{{ submission.activity_title }}</strong> en <em>{{ submission.course_title }}</em> - Calificación: <span class="badge bg-success">{{ submission.score }} / 100</span>
+                            </button>
+                        </h2>
+                    </div>
+                    <div id="collapseGraded{{ loop.index }}" class="collapse" aria-labelledby="headingGraded{{ loop.index }}" data-bs-parent="#gradedSubmissionsAccordion">
+                        <div class="card-body">
+                            <p><strong>Entregado el:</strong> {{ submission.submitted_at.strftime('%d-%m-%Y %H:%M') }}</p>
+                            <p><strong>Calificado por:</strong> {{ submission.judge_username }} el {{ submission.qualification_date.strftime('%d-%m-%Y %H:%M') }}</p>
+                            <p><strong>Comentarios del Juez:</strong> {{ submission.comments if submission.comments else 'Sin comentarios.' }}</p>
+                            {% if submission.file_path %}
+                                <a href="{{ url_for('uploaded_file', filename=submission.file_path.split('/')[-1]) }}" target="_blank" class="btn btn-outline-primary btn-sm mt-2">Ver Archivo Adjunto</a>
+                            {% endif %}
+                            {% if submission.submission_text %}
+                                <p class="mt-2"><strong>Texto de la entrega:</strong></p>
+                                <div class="alert alert-light border">{{ submission.submission_text }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="alert alert-info" role="alert">
+                Aún no tienes calificaciones para tus entregas.
+            </div>
+        {% endif %}
+    </div>
+
+    <div class="col-md-12 mt-5">
+        <h3 class="text-warning">Entregas Pendientes de Calificación</h3>
+        {% if pending_submissions %}
+            <ul class="list-group">
+                {% for submission in pending_submissions %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <div>
+                        <strong>{{ submission.activity_title }}</strong> en <em>{{ submission.course_title }}</em>
+                        <p class="mb-0"><small class="text-muted">Entregado el: {{ submission.submitted_at.strftime('%d-%m-%Y %H:%M') }}</small></p>
+                        {% if submission.activity_title %}
+                            {% set activity = course.activities | selectattr('title', 'equalto', submission.activity_title) | first %}
+                            {% if activity and activity.due_date and activity.due_date < now %} {# Usa 'now' aquí #}
+                                <span class="badge bg-danger ms-2">Estado: ¡Vencida, sin calificar!</span>
+                            {% else %}
+                                <span class="badge bg-warning ms-2">Estado: Pendiente de Revisión</span>
+                            {% endif %}
+                        {% else %}
+                            <span class="badge bg-warning ms-2">Estado: Pendiente de Revisión</span>
+                        {% endif %}
+                        <br>
+                        <small class="text-muted">Juez Asignado: {{ submission.assigned_judge }}</small>
+                    </div>
+                    <div>
+                        {% if submission.file_path %}
+                            <a href="{{ url_for('uploaded_file', filename=submission.file_path.split('/')[-1]) }}" target="_blank" class="btn btn-outline-primary btn-sm">Ver Archivo</a>
+                        {% endif %}
+                    </div>
+                </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <div class="alert alert-success" role="alert">
+                ¡No tienes entregas pendientes de calificación!
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block title %}Gestionar Inscripciones{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="mb-4">Gestionar Inscripciones</h2>
+    <p>Aquí puedes ver todas las inscripciones de los participantes a los concursos.</p>
+
+    <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white">
+            Lista de Inscripciones
+        </div>
+        <div class="card-body">
+            {% if enrollments %}
+            <div class="table-responsive">
+                <table class="table table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th>ID Inscripción</th>
+                            <th>Participante</th>
+                            <th>Concurso</th>
+                            <th>Fecha de Inscripción</th>
+                            <th>Acciones</th> {# Puedes agregar acciones aquí si lo necesitas #}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for enrollment in enrollments %}
+                        <tr>
+                            <td>{{ enrollment.id }}</td>
+                            <td>{{ enrollment.participant_username }}</td>
+                            <td>{{ enrollment.course_title }}</td>
+                            <td>{{ enrollment.enrollment_date }}</td>
+                            <td>
+                                {# Aquí podrías poner botones para "Desinscribir" o "Ver detalles" si lo deseas #}
+                                <form action="{{ url_for('delete_enrollment') }}" method="POST" style="display:inline;">
+                                    <input type="hidden" name="enrollment_id" value="{{ enrollment.id }}">
+                                    <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('¿Estás seguro de que quieres eliminar esta inscripción?');">Eliminar</button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <p>No hay inscripciones registradas aún.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
